@@ -9,6 +9,8 @@ import Vue from 'vue'
 import axios from 'axios'
 Vue.prototype.$axios = axios
 
+// Vue.component(Indicator.name, Indicator)
+
 import App from './App.vue'
 import router from './router';
 
