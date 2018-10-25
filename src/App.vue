@@ -1,10 +1,10 @@
 <template>
     <div class='app-main' :style='style'>
         <div :class='["app-top",scrollTop?"active":""]'>
-            <span v-show='returnShow' class='return' @click='returns'><img src="./img/return.png" alt=""></span>
+            <span v-show='returnShow&&scrollTop' class='return' @click='returns'><img src="./img/return.png" alt=""></span>
             <h1>Beautiful</h1>
         </div>
-        <div class='app-view'>
+        <div class='app-view' :style="{'min-height':height+'px'}">
             <keep-alive>
                 <router-view v-if='$route.meta.keepAlive&&!$route.meta.animate'></router-view>
             </keep-alive>
@@ -40,16 +40,22 @@
                 style: {},
                 scrollTop: null,
                 returnShow: false,
+                routes: '',
             }
         },
         watch: {
             '$route.path' (newVal) {
-                this.returnShow = newVal === '/home' ? false : true
+                this.returnShow = newVal === '/home' || newVal === '/select' ? false : true
             }
         },
         methods: {
             returns() {
                 this.$router.go(-1)
+                // if (this.routes === '/select') {
+                //     this.$router.push('/home')
+                // } else {
+                //     this.$router.go(-1)
+                // }
             },
             getInfo() {
                 this.width = window.innerWidth
@@ -61,10 +67,8 @@
                 window.addEventListener('scroll', () => {
                     if (scroll >= document.scrollingElement.scrollTop) {
                         this.scrollTop = false
-                        console.log('向上')
                     } else {
                         this.scrollTop = true
-                        console.log('向下')
                     }
                     scroll = document.scrollingElement.scrollTop
                 })
@@ -74,7 +78,8 @@
             this.scroll()
         },
         created() {
-            this.returnShow = this.$route.path === '/home' ? false : true
+            this.routes = this.$route.path
+            this.returnShow = this.$route.path === '/home' || this.$route.path === '/select' ? false : true
             this.getInfo()
         }
     }
@@ -87,18 +92,24 @@
         content: "\e005";
     }
     .root-enter {
-        opacity:0;transform: translateX(100%);
+        opacity: 0;
+        transform: translateX(100%);
+        height: 100%;
     }
-    .root-leave-to{
-        opacity:0;transform: translateX(-100%);position:fixed;top:0;
+    .root-leave-to {
+        opacity: 0;
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
     }
     .root-enter-active,
     .root-leave-active {
         transition: all .5s;
     }
-    
     .app-main {
-        overflow-x:hidden;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
         min-height: 100%;
         width: 100%;
         background: #f0f0f0;
@@ -108,9 +119,9 @@
         background-attachment: fixed;
         position: absolute;
         .app-view {
-            min-height: 100%;
+            flex: 1;
             box-sizing: border-box;
-            position:relative;
+            position: relative;
         }
     }
     .app-top {
@@ -129,7 +140,7 @@
             display: block;
             position: absolute;
             left: 2%;
-            top: 3%;
+            top: 2%;
             width: .5rem;
             img {
                 width: 100%;

@@ -5,9 +5,9 @@
                 <div>
                     <img :src="item.thumb" alt="" @click='photoShow(i,"show")'>
                     <!-- <div :class='["imgView",item.show?"show":""]' ref='photo'>
-                            <i class='close' v-show='item.show' @click='photoShow(i,"close")'>×</i>
-                            <img :src="item.thumb" alt="">
-                        </div> -->
+                                <i class='close' v-show='item.show' @click='photoShow(i,"close")'>×</i>
+                                <img :src="item.thumb" alt="">
+                            </div> -->
                 </div>
                 <div class='content'>
                     <p>{{ item.title }}</p>
@@ -18,7 +18,6 @@
 </template>
 <script>
     import $ from '../js/common.js'
-    
     export default {
         data() {
             return {
@@ -65,7 +64,7 @@
                         this.$set(arr[i], 'id', i)
                         this.$set(arr[i], 'show', false)
                     })
-                    this.info = arr
+                    this.info.concat(arr)
                 }).catch(err => {
                     alert(String(err))
                 })
@@ -104,7 +103,7 @@
                     p {
                         font-size: .35rem;
                         line-height: .5rem;
-                        margin:0;
+                        margin: 0;
                     }
                     .imgView {
                         position: absolute;
